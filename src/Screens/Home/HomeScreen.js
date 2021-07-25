@@ -34,7 +34,7 @@ export default function HomeScreen(props) {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             quality: 1,
         });
-        setImageURI(result.uri)
+        if (result.uri) { setImageURI(result.uri) }
     }
 
     return (
