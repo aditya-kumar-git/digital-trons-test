@@ -18,6 +18,9 @@ export default StyleSheet.create({
         fontSize:20,
         fontWeight:'bold',
         marginVertical:15,
+    },
+    membersContainer:{
+      padding: 10,
     }
   });
   
