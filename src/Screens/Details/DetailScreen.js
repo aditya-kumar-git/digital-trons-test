@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, ScrollView, Platform } from 'react-native'
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, ScrollView, Platform, StatusBar } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux';
 import { changeListData } from 'Redux/Action'
 import styles from './DetailStyle'
@@ -85,6 +85,7 @@ export default function DetailScreen(props) {
             enabled={true}
             behavior={Platform.OS === "ios" ? "padding" : null}
         >
+            <StatusBar barStyle={'light-content'} />
             <SafeAreaView>
                 <View style={styles.BackButtonContainer}>
                     <TouchableOpacity
