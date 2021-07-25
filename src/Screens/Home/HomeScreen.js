@@ -1,10 +1,13 @@
 import React from 'react'
-import { View, Text, FlatList, SafeAreaView, StatusBar } from 'react-native'
+import { View,  FlatList, SafeAreaView, StatusBar } from 'react-native'
 import { useSelector } from 'react-redux'
 import ListItem from 'Components/ListItem'
 
 export default function HomeScreen(props) {
     const ListData = useSelector((state) => state.listData)
+
+    console.log(ListData);
+
     return (
         <View>
             <StatusBar
