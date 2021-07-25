@@ -13,13 +13,16 @@ export default function ListItemComp(props) {
         if (listData.FirstName.length > 0 && listData.LastName.length > 0 && listData.PhoneNumber.length > 0) {
             setBookedORnot(true)
         }
+        else {
+            setBookedORnot(false)
+        }
     }, [data])
 
 
     return (
         <TouchableOpacity
             onPress={() => {
-                navigation.navigate("Detail", { selectedTime: listData.time })
+                navigation.navigate("Detail", { selectedTime: listData.time, isBooked: bookedORnot })
             }}
             style={bookedORnot ? styles.BlockContainerSelected : styles.BlockContainer}
             activeOpacity={0.7}

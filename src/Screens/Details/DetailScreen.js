@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux';
 import { changeListData } from 'Redux/Action'
+import styles from './DetailStyle'
+import { Ionicons } from '@expo/vector-icons';
+
 
 export default function DetailScreen(props) {
 
@@ -11,9 +14,9 @@ export default function DetailScreen(props) {
     const [phoneNumber, setPhoneNumber] = useState('')
 
     useEffect(() => {
-      setFirstName(selectedState.FirstName)
-      setLasttName(selectedState.LastName)
-      setPhoneNumber(selectedState.PhoneNumber)
+        setFirstName(selectedState.FirstName)
+        setLasttName(selectedState.LastName)
+        setPhoneNumber(selectedState.PhoneNumber)
     }, [selectedState])
 
     useEffect(() => {
@@ -58,55 +61,124 @@ export default function DetailScreen(props) {
         props.navigation.goBack()
     }
 
+    let dismissKeyboard = () => {
+        Keyboard.dismiss()
+    }
+
     let cancelSubmission = () => {
         props.navigation.goBack()
     }
 
     const ListData = useSelector((state) => state.listData)
     const dispatch = useDispatch()
+    const LNinput = useRef(null)
+    const PNinput = useRef(null)
     return (
-        <SafeAreaView>
-            <Text>{selectedState.time}</Text>
 
-            <TextInput
-                placeholder='First Name'
-                value={firstName}
-                onChangeText={(data) => {
-                    changeInputs(data, 1)
-                }}
-            />
+        <KeyboardAvoidingView
+            style={styles.Container}
+            behavior='padding'
+            enabled={true}
+        >
+            <SafeAreaView>
+                <View
+                    style={styles.BackButtonContainer}
+                >
+                    <TouchableOpacity
+                        onPress={cancelSubmission}
+                        activeOpacity={0.7}
+                    >
 
-            <TextInput
-                placeholder='Last Name'
-                value={lasttName}
-                onChangeText={(data) => {
-                    changeInputs(data, 2)
-                }}
-            />
+                        <Ionicons name="chevron-back" style={styles.BackButton} />
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
 
-            <TextInput
-                placeholder='Phone Number'
-                value={phoneNumber}
-                onChangeText={(data) => {
-                    changeInputs(data, 3)
-                }}
-                keyboardType='numbers-and-punctuation'
-            />
 
-            <TouchableOpacity
-                style={{ backgroundColor: 'grey', margin: 20, padding: 10 }}
-                onPress={submitData}
+
+            <ScrollView
+                style={styles.DataContainer}
+                bounces={false}
+                alwaysBounceHorizontal={false}
+                alwaysBounceVertical={false}
             >
-                <Text>Save</Text>
-            </TouchableOpacity>
 
-            <TouchableOpacity
-                style={{ backgroundColor: 'orange', margin: 20, padding: 10 }}
-                onPress={cancelSubmission}
-            >
-                <Text>Cancel</Text>
-            </TouchableOpacity>
 
-        </SafeAreaView>
+                <View
+                    style={styles.Row}
+                >
+
+                    <Text style={styles.Heading}>{selectedState.time}</Text>
+                    <View style={styles.CancelButtonContainer} >
+
+                        <TouchableOpacity
+                            style={styles.CancelButton}
+                            onPress={cancelSubmission}
+                            activeOpacity={0.7}
+                        >
+                            <Text style={styles.CancelButtonText}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <TextInput
+                    placeholder='First Name'
+                    placeholderTextColor='grey'
+                    value={firstName}
+                    onChangeText={(data) => {
+                        changeInputs(data, 1)
+                    }}
+                    style={styles.InputStyles}
+                    onSubmitEditing={() => {
+                        LNinput.current.focus()
+                    }}
+                    blurOnSubmit={false}
+                />
+
+                <TextInput
+                    placeholder='Last Name'
+                    placeholderTextColor='grey'
+                    value={lasttName}
+                    onChangeText={(data) => {
+                        changeInputs(data, 2)
+                    }}
+                    style={styles.InputStyles}
+                    ref={LNinput}
+                    onSubmitEditing={() => {
+                        PNinput.current.focus()
+                    }}
+                    blurOnSubmit={false}
+                />
+
+                <TextInput
+                    placeholder='Phone Number'
+                    placeholderTextColor='grey'
+                    value={phoneNumber}
+                    onChangeText={(data) => {
+                        changeInputs(data, 3)
+                    }}
+                    keyboardType='numbers-and-punctuation'
+                    style={styles.InputStyles}
+                    ref={PNinput}
+                    blurOnSubmit={false}
+                    returnKeyType='done'
+                    onSubmitEditing={dismissKeyboard}
+                />
+
+                <TouchableOpacity
+                    style={styles.SaveButton}
+                    onPress={submitData}
+                    activeOpacity={0.7}
+                >
+                    <Text style={styles.SaveButtonText}>
+                        {
+                            props.route.params.isBooked ? 'Save Changes' : 'Book Slot'
+                        }
+                    </Text>
+                </TouchableOpacity>
+
+            </ScrollView>
+
+        </KeyboardAvoidingView>
     )
 }
