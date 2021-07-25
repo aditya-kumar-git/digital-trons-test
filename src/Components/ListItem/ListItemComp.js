@@ -1,19 +1,33 @@
-import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
+import { useEffect } from 'react'
+import { Text, TouchableOpacity } from 'react-native'
+import styles from './ListItemStyle'
 
 export default function ListItemComp(props) {
-    const {  data, navigtion } = props
-    let listData= data.item
+    const { data, navigation } = props
+    let listData = data.item
+
+    const [bookedORnot, setBookedORnot] = useState(false)
+    useEffect(() => {
+
+        if (listData.FirstName.length > 0 && listData.LastName.length > 0 && listData.PhoneNumber.length > 0) {
+            setBookedORnot(true)
+        }
+    }, [data])
 
 
     return (
         <TouchableOpacity
             onPress={() => {
-                props.navigation.navigate("Detail",{selectedTime:listData.time})
+                navigation.navigate("Detail", { selectedTime: listData.time })
             }}
-            style={{ backgroundColor: listData.FirstName.length > 0?'red':'pink', margin: 20, padding: 15 }}
+            style={bookedORnot ? styles.BlockContainerSelected : styles.BlockContainer}
+            activeOpacity={0.7}
         >
-            <Text>{listData.time}</Text>
+            <Text style={styles.BlockTitle}>{listData.time}</Text>
+            <Text style={styles.BlockSubText}>{
+                bookedORnot ? 'Booked Already' : 'Book Your Slot'
+            }</Text>
         </TouchableOpacity>
     )
 }
