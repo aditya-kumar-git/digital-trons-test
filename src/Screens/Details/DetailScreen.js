@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, ScrollView } from 'react-native'
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, ScrollView, Platform } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux';
 import { changeListData } from 'Redux/Action'
 import styles from './DetailStyle'
@@ -43,22 +43,27 @@ export default function DetailScreen(props) {
     }
 
     let submitData = () => {
-        let tempArr = ListData.map((item) => {
-            if (item.time === props.route.params.selectedTime) {
-                return {
-                    time: item.time,
-                    FirstName: firstName,
-                    LastName: lasttName,
-                    PhoneNumber: phoneNumber,
+        if (firstName.length > 0 && lasttName.length > 0 && phoneNumber.length > 0) {
+            let tempArr = ListData.map((item) => {
+                if (item.time === props.route.params.selectedTime) {
+                    return {
+                        time: item.time,
+                        FirstName: firstName,
+                        LastName: lasttName,
+                        PhoneNumber: phoneNumber,
+                    }
                 }
-            }
-            else {
-                return item
-            }
-        })
+                else {
+                    return item
+                }
+            })
 
-        dispatch(changeListData(tempArr))
-        props.navigation.goBack()
+            dispatch(changeListData(tempArr))
+            props.navigation.goBack()
+        }
+        else {
+            alert('Please fill all the fields.')
+        }
     }
 
     let dismissKeyboard = () => {
@@ -77,40 +82,28 @@ export default function DetailScreen(props) {
 
         <KeyboardAvoidingView
             style={styles.Container}
-            behavior='padding'
             enabled={true}
+            behavior={Platform.OS === "ios" ? "padding" : null}
         >
             <SafeAreaView>
-                <View
-                    style={styles.BackButtonContainer}
-                >
+                <View style={styles.BackButtonContainer}>
                     <TouchableOpacity
                         onPress={cancelSubmission}
                         activeOpacity={0.7}
                     >
-
                         <Ionicons name="chevron-back" style={styles.BackButton} />
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
-
-
-
             <ScrollView
                 style={styles.DataContainer}
                 bounces={false}
                 alwaysBounceHorizontal={false}
                 alwaysBounceVertical={false}
             >
-
-
-                <View
-                    style={styles.Row}
-                >
-
+                <View style={styles.Row}>
                     <Text style={styles.Heading}>{selectedState.time}</Text>
                     <View style={styles.CancelButtonContainer} >
-
                         <TouchableOpacity
                             style={styles.CancelButton}
                             onPress={cancelSubmission}

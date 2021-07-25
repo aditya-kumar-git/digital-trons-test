@@ -21,6 +21,7 @@ export default StyleSheet.create({
     },
     membersContainer:{
       padding: 10,
+      marginBottom:15
     }
   });
   

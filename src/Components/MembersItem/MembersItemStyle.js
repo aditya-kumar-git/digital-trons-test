@@ -30,6 +30,6 @@ export default StyleSheet.create({
         borderRadius:60,
         justifyContent:'center',
         alignItems:'center',
-        marginBottom: 5
+        marginBottom: 5,
     }
 });

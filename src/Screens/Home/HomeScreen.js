@@ -21,7 +21,7 @@ export default function HomeScreen(props) {
                 {showMembers.length > 0
                     &&
                     <View style={styles.membersContainer}>
-                        <Text style={styles.Heading}>Members</Text>
+                        <Text style={styles.Heading}>Booked Slots</Text>
                         <FlatList
                             data={ListData}
                             keyExtractor={(item, index) => {
